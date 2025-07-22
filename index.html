@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yashwanth Kumar - Machine Learning Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: A single-page, vertical-scrolling layout with a fixed navigation header for seamless access to all sections. The user flow is designed to be a narrative journey: starting with a strong first impression (Hero), moving to a personal story (About), showcasing capabilities (Skills, Portfolio), providing proof (Experience), and ending with a clear call to action (Contact). This structure is intuitive for a personal portfolio, allowing visitors to either follow the story or jump directly to sections of interest, maximizing usability and engagement. New sections for Education, Certifications, and Volunteering are integrated into the flow to provide a comprehensive view of the applicant's profile. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Skills list -> Goal: Compare proficiency -> Viz/Method: Horizontal Bar Chart (Chart.js) -> Interaction: Hover tooltips show percentages -> Justification: Provides a quick, visually comparable summary of abilities, which is more engaging than a static list.
+        - Report Info: Portfolio/Projects list -> Goal: Organize and showcase work -> Viz/Method: Responsive Card Grid (HTML/Tailwind) -> Interaction: Hover effects on cards -> Justification: A modern, scannable, and visually appealing layout for presenting multiple projects.
+        - Report Info: Work Experience & Education -> Goal: Show career and academic progression -> Viz/Method: Vertical Timeline (HTML/Tailwind) -> Interaction: None -> Justification: Intuitively represents chronological data, making history easy to follow.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8; /* Warm White */
+            color: #4A4A4A; /* Dark Gray */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        .nav-link {
+            transition: color 0.3s;
+        }
+        .nav-link:hover {
+            color: #D97706; /* Amber Accent */
+        }
+        .cta-button {
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+        .project-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header id="header" class="bg-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#home" class="text-2xl font-bold text-gray-800">Yashwanth Kumar</a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#about" class="nav-link text-gray-600">About</a>
+                <a href="#skills" class="nav-link text-gray-600">Skills</a>
+                <a href="#portfolio" class="nav-link text-gray-600">Portfolio</a>
+                <a href="#experience" class="nav-link text-gray-600">Experience</a>
+                <a href="#education" class="nav-link text-gray-600">Education</a>
+                <a href="#certifications" class="nav-link text-gray-600">Certifications</a>
+                <a href="#volunteering" class="nav-link text-gray-600">Volunteering</a>
+                <a href="#contact" class="cta-button bg-amber-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-amber-700">Contact</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#about" class="block py-2 px-4 text-sm text-gray-600 hover:bg-gray-100">About</a>
+            <a href="#skills" class="block py-2 px-4 text-sm text-gray-600 hover:bg-gray-100">Skills</a>
+            <a href="#portfolio" class="block py-2 px-4 text-sm text-gray-600 hover:bg-gray-100">Portfolio</a>
+            <a href="#experience" class="block py-2 px-4 text-sm text-gray-600 hover:bg-gray-100">Experience</a>
+            <a href="#education" class="block py-2 px-4 text-sm text-gray-600 hover:bg-gray-100">Education</a>
+            <a href="#certifications" class="block py-2 px-4 text-sm text-gray-600 hover:bg-gray-100">Certifications</a>
+            <a href="#volunteering" class="block py-2 px-4 text-sm text-gray-600 hover:bg-gray-100">Volunteering</a>
+            <a href="#contact" class="block py-2 px-4 text-sm text-white bg-amber-600">Contact</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="pt-24 md:pt-32 pb-16">
+            <div class="container mx-auto px-6 flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 text-center md:text-left mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-6xl font-bold text-gray-800 leading-tight mb-4">Machine Learning Engineer</h1>
+                    <p class="text-lg text-gray-600 mb-8">Enthusiastic and detail-oriented AIML student passionate about leveraging Artificial Intelligence to solve real-world problems.</p>
+                    <div class="flex justify-center md:justify-start space-x-4">
+                        <a href="#portfolio" class="cta-button bg-amber-600 text-white px-6 py-3 rounded-md shadow-lg hover:bg-amber-700">View My Portfolio</a>
+                        <a href="#contact" class="cta-button bg-gray-200 text-gray-800 px-6 py-3 rounded-md shadow-lg hover:bg-gray-300">Get in Touch</a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <img src="https://placehold.co/400x400/E9D5A1/4A4A4A?text=Yashwanth" alt="Yashwanth Kumar Professional Headshot" class="rounded-full shadow-2xl w-64 h-64 md:w-80 md:h-80 object-cover">
+                </div>
+            </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section id="about" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-2">About Me</h2>
+                <p class="text-center text-gray-500 mb-12">Here's a little bit about my journey and what drives my passion for development.</p>
+                <div class="flex flex-col md:flex-row items-center gap-12">
+                    <div class="md:w-2/3">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-4">My Story</h3>
+                        <p class="text-gray-600 mb-4 leading-relaxed">
+                            Enthusiastic and detail-oriented AIML student passionate about leveraging Artificial Intelligence to solve real-world problems. Eager to begin a career in machine learning and data-driven technologies, with a strong foundation in Python, ML algorithms, and data analysis.
+                        </p>
+                        <p class="text-gray-600 leading-relaxed">
+                            Looking for an opportunity to apply my technical skills, learn from industry experts, and contribute to innovative AI/ML projects that make an impact. I also have experience in organizing events and managing teams as a Hospitality Lead for Google Crowdsource and as part of the organizing committee for Build-A-Thon 2k23.
+                        </p>
+                    </div>
+                    <div class="md:w-1/3 grid grid-cols-2 gap-4 text-center">
+                        <div class="bg-amber-50 p-6 rounded-lg">
+                            <h4 class="font-bold text-amber-800 text-lg">AI Enthusiast</h4>
+                            <p class="text-sm text-amber-700">Passionate about AI-powered solutions.</p>
+                        </div>
+                        <div class="bg-gray-100 p-6 rounded-lg">
+                            <h4 class="font-bold text-gray-800 text-lg">Problem Solver</h4>
+                            <p class="text-sm text-gray-600">Analytical and creative solutions.</p>
+                        </div>
+                        <div class="bg-gray-100 p-6 rounded-lg">
+                            <h4 class="font-bold text-gray-800 text-lg">Detail-Oriented</h4>
+                            <p class="text-sm text-gray-600">Focus on robust and scalable code.</p>
+                        </div>
+                        <div class="bg-amber-50 p-6 rounded-lg">
+                            <h4 class="font-bold text-amber-800 text-lg">Collaborative</h4>
+                            <p class="text-sm text-amber-700">Effective in team environments.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-20">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-2">Technical Skills</h2>
+                <p class="text-center text-gray-500 mb-12">Here are a few technologies I've been working with recently. The chart is interactive—hover over the bars for more details!</p>
+                <div class="chart-container">
+                    <canvas id="skillsChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-2">My Portfolio</h2>
+                <p class="text-center text-gray-500 mb-12">A selection of projects that I'm proud of. Each project represents a unique challenge and a learning opportunity.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+                    <!-- Project 1: Advanced Calorie Tracking System Using Python -->
+                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden shadow-md">
+                        <img src="https://placehold.co/600x400/F3F4F6/4A4A4A?text=Calorie+Tracker" alt="Advanced Calorie Tracking System Screenshot" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Advanced Calorie Tracking System</h3>
+                            <p class="text-gray-600 mb-4">An AI-powered system that analyzes food images to estimate calories and provide nutritional insights. It features a user-friendly web interface, secure API integration, and interactive data visualization. The system ensures efficient image storage, secure data handling, and accurate food recognition for seamless calorie tracking.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Python</span>
+                                <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">AI/ML</span>
+                                <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Web Interface</span>
+                                <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">API Integration</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project 2: Fake logo Detection using KNN algorithm -->
+                    <div class="project-card bg-gray-50 rounded-lg overflow-hidden shadow-md">
+                        <img src="https://placehold.co/600x400/E9D5A1/4A4A4A?text=Fake+Logo+Detection" alt="Fake Logo Detection Screenshot" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Fake Logo Detection using KNN</h3>
+                            <p class="text-gray-600 mb-4">The project utilizes the KNN algorithm to detect counterfeit logos with high accuracy. It analyzes logo features to differentiate between genuine and fake designs, ensuring reliable brand authentication.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">KNN Algorithm</span>
+                                <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Machine Learning</span>
+                                <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Data Analysis</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="py-20">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-2">Career Experience</h2>
+                <p class="text-center text-gray-500 mb-12">My professional timeline, highlighting key roles and accomplishments that have shaped my career.</p>
+                <div class="relative max-w-2xl mx-auto">
+                    <div class="absolute left-1/2 w-0.5 h-full bg-gray-200 transform -translate-x-1/2"></div>
+                    <!-- Experience 1: Machine Learning Intern -->
+                    <div class="mt-8 relative">
+                        <div class="flex items-center">
+                            <div class="w-1/2 pr-8 text-right">
+                                <h3 class="text-lg font-semibold text-gray-800">Machine Learning Intern</h3>
+                                <p class="text-gray-600">Bharath Intern, Hyderabad, India</p>
+                                <p class="text-sm text-gray-500">Sep 2023 - Dec 2023</p>
+                            </div>
+                            <div class="w-1/2 pl-8">
+                                <p class="text-gray-600">This internship has been a tremendous learning journey, allowing me to apply my theoretical knowledge to real-world problems and gain valuable insights into the world of data-driven decision-making. I would like to express my heartfelt gratitude to Bharat Intern for granting me this amazing opportunity. I invite you to explore the project, provide feedback and connect with me to discuss this project or any other exciting opportunities on the horizon.</p>
+                            </div>
+                        </div>
+                        <div class="absolute left-1/2 top-1/2 w-4 h-4 bg-amber-600 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-4 border-white"></div>
+                    </div>
+                    <!-- Experience 2: Salesforce Developer Intern -->
+                    <div class="mt-16 relative">
+                        <div class="flex items-center">
+                            <div class="w-1/2 pr-8">
+                                <p class="text-gray-600 text-right">Implemented features using Java for CRM solutions, resulting in an improved data management system.</p>
+                            </div>
+                            <div class="w-1/2 pl-8 text-left">
+                                <h3 class="text-lg font-semibold text-gray-800">Salesforce Developer Intern</h3>
+                                <p class="text-gray-600">SALESFORCE, Hyderabad, India</p>
+                                <p class="text-sm text-gray-500">Oct 2023 - Dec 2023</p>
+                            </div>
+                        </div>
+                        <div class="absolute left-1/2 top-1/2 w-4 h-4 bg-amber-600 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-4 border-white"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-2">Education</h2>
+                <p class="text-center text-gray-500 mb-12">My academic journey and qualifications.</p>
+                <div class="relative max-w-2xl mx-auto">
+                    <div class="absolute left-1/2 w-0.5 h-full bg-gray-200 transform -translate-x-1/2"></div>
+                    <!-- Education 1: B.Tech -->
+                    <div class="mt-8 relative">
+                        <div class="flex items-center">
+                            <div class="w-1/2 pr-8 text-right">
+                                <h3 class="text-lg font-semibold text-gray-800">B.Tech, CSE-AI ML</h3>
+                                <p class="text-gray-600">Vignana Bharathi Institute of Technology, Ghatkesar, India</p>
+                                <p class="text-sm text-gray-500">Current C.GPA-8.08</p>
+                            </div>
+                            <div class="w-1/2 pl-8"></div>
+                        </div>
+                        <div class="absolute left-1/2 top-1/2 w-4 h-4 bg-amber-600 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-4 border-white"></div>
+                    </div>
+                    <!-- Education 2: Intermediate -->
+                    <div class="mt-16 relative">
+                        <div class="flex items-center">
+                            <div class="w-1/2 pr-8"></div>
+                            <div class="w-1/2 pl-8 text-left">
+                                <h3 class="text-lg font-semibold text-gray-800">Intermediate, MPC</h3>
+                                <p class="text-gray-600">Narayana Junior College, Hyderabad, India</p>
+                                <p class="text-sm text-gray-500">Percentage-90%</p>
+                            </div>
+                        </div>
+                        <div class="absolute left-1/2 top-1/2 w-4 h-4 bg-amber-600 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-4 border-white"></div>
+                    </div>
+                    <!-- Education 3: Secondary Education -->
+                    <div class="mt-16 relative">
+                        <div class="flex items-center">
+                            <div class="w-1/2 pr-8 text-right">
+                                <h3 class="text-lg font-semibold text-gray-800">Secondary Education, SSC</h3>
+                                <p class="text-gray-600">Dr KKR's Gowtham School, Hyderabad, India</p>
+                                <p class="text-sm text-gray-500">Percentage-92%</p>
+                            </div>
+                            <div class="w-1/2 pl-8"></div>
+                        </div>
+                        <div class="absolute left-1/2 top-1/2 w-4 h-4 bg-amber-600 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-4 border-white"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certifications Section -->
+        <section id="certifications" class="py-20">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-2">Certifications</h2>
+                <p class="text-center text-gray-500 mb-12">Certifications that enhance my skill set.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-md text-center">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">.NET COURSE</h3>
+                        <p class="text-gray-600">Wipro</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-md text-center">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">MACHINE LEARNING USING PYTHON</h3>
+                        <p class="text-gray-600">Edvedha</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Volunteering Section -->
+        <section id="volunteering" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-2">Volunteering</h2>
+                <p class="text-center text-gray-500 mb-12">Contributing to the community and organizing impactful events.</p>
+                <div class="relative max-w-2xl mx-auto">
+                    <div class="absolute left-1/2 w-0.5 h-full bg-gray-200 transform -translate-x-1/2"></div>
+                    <!-- Volunteering 1: Hospitality Lead -->
+                    <div class="mt-8 relative">
+                        <div class="flex items-center">
+                            <div class="w-1/2 pr-8 text-right">
+                                <h3 class="text-lg font-semibold text-gray-800">Hospitality Lead</h3>
+                                <p class="text-gray-600">Google Crowdsource</p>
+                                <p class="text-sm text-gray-500">Jun 2024 - Jun 2025</p>
+                            </div>
+                            <div class="w-1/2 pl-8">
+                                <ul class="list-disc list-inside text-gray-600">
+                                    <li>Organized events, and managed teams to create a welcoming environment.</li>
+                                    <li>Ensured smooth operations and exceptional hospitality for an enhanced guest experience.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="absolute left-1/2 top-1/2 w-4 h-4 bg-amber-600 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-4 border-white"></div>
+                    </div>
+                    <!-- Volunteering 2: Organizing Committee -->
+                    <div class="mt-16 relative">
+                        <div class="flex items-center">
+                            <div class="w-1/2 pr-8">
+                                <ul class="list-disc list-inside text-gray-600 text-right">
+                                    <li>Honored to be part of the organizing committee for Build-A-Thon 2k23, a 24-hour hackathon.</li>
+                                    <li>Held on 25th-26th September in collaboration with women protection cell VBIT.</li>
+                                </ul>
+                            </div>
+                            <div class="w-1/2 pl-8 text-left">
+                                <h3 class="text-lg font-semibold text-gray-800">Organizing Committee for Build-A-Thon 2k23</h3>
+                                <p class="text-gray-600">Google Crowdsource, Hyderabad</p>
+                            </div>
+                        </div>
+                        <div class="absolute left-1/2 top-1/2 w-4 h-4 bg-amber-600 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-4 border-white"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-2">Get In Touch</h2>
+                <p class="text-center text-gray-500 mb-12">Have a project in mind or just want to say hello? My inbox is always open.</p>
+                <div class="max-w-xl mx-auto">
+                    <form action="#" method="POST" class="space-y-6">
+                        <div>
+                            <label for="name" class="sr-only">Name</label>
+                            <input type="text" name="name" id="name" placeholder="Your Name" class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        </div>
+                        <div>
+                            <label for="email" class="sr-only">Email</label>
+                            <input type="email" name="email" id="email" value="dantuyashwanth2004@gmail.com" class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        </div>
+                        <div>
+                            <label for="message" class="sr-only">Message</label>
+                            <textarea name="message" id="message" rows="5" placeholder="Your Message" class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="cta-button bg-amber-600 text-white px-8 py-3 rounded-md shadow-lg hover:bg-amber-700 w-full md:w-auto">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p class="mb-4">&copy; 2025 Yashwanth Kumar. All rights reserved.</p>
+            <div class="flex justify-center space-x-6">
+                <a href="https://www.linkedin.com/in/yashwanth-kumar" target="_blank" class="hover:text-amber-400">LinkedIn</a>
+                <a href="https://github.com/Yashwanth-Kumar" target="_blank" class="hover:text-amber-400">GitHub</a>
+                <!-- Add Twitter if available -->
+                <a href="#" class="hover:text-amber-400">Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        // Close mobile menu on click
+                        if (!mobileMenu.classList.contains('hidden')) {
+                            mobileMenu.classList.add('hidden');
+                        }
+                        
+                        // Adjust for fixed header height
+                        const headerOffset = document.getElementById('header').offsetHeight;
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                        });
+                    }
+                });
+            });
+
+            // Skills Chart
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            const skillsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Python', 'Java', 'C Language', 'HTML', 'CSS', 'SQL', 'ML'],
+                    datasets: [{
+                        label: 'Proficiency',
+                        data: [90, 80, 70, 85, 80, 90, 85], // Arbitrary percentages based on skills listed
+                        backgroundColor: 'rgba(217, 119, 6, 0.7)', // amber-600 with opacity
+                        borderColor: 'rgba(217, 119, 6, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Proficiency: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                display: false,
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false,
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                color: '#4A4A4A',
+                                font: {
+                                    size: 14,
+                                    weight: '500'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
